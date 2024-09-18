@@ -1,0 +1,6 @@
+ec2/.env
+policy_group/.env
+ec2/ec2-ssh.pem
+*backup*
+*.tfstate*
+*.terraform/

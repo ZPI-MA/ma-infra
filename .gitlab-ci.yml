@@ -1,0 +1,56 @@
+stages:
+  - setup
+  - build
+  - healthcheck
+  - deploy
+
+variables:
+  TF_VAR_aws_access_key: $AWS_ACCESS_KEY_ID
+  TF_VAR_aws_secret_key: $AWS_SECRET_ACCESS_KEY
+  TF_VAR_aws_region: $AWS_DEFAULT_REGION
+  SSH_PRIVATE_KEY: $EC2_SSH_PEM
+
+default:
+  image: ubuntu:latest
+
+set_up_files:
+  stage: setup
+  script:
+    # - echo "[default]" > ~/.aws/credentials
+    # - echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+    # - echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+    # - ssh-keygen -t rsa -b 4096 -C "franeksu@gmail.com" -f ~/.ssh/id_rsa -N ""
+    # - echo "TF_VAR_ssh_public_key=$(cat ~/.ssh/id_rsa.pub)" >> env
+    - echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
+  artifacts:
+    dotenv:
+      file: env
+
+set_up_terraform:
+  stage: setup
+  needs:
+    - set_up_files
+      artifacts: true
+  before_script:
+    - sudo apt update && sudo apt install -y terraform
+    - terraform --version
+  script:
+    - terraform init
+    - terraform validate
+    - terraform plan
+
+build:
+  stage: build
+  script:
+    - terraform apply -auto-approve
+  after_script:
+    - echo "EC2_PUBLIC_IP=$(terraform output public_ip)" >> env
+  artifacts:
+    dotenv:
+      file: env
+
+check_ec2_health:
+  stage: healthcheck
+  script:
+    - sleep 60
+    - ssh ec2-user@$EC2_PUBLIC_IP "echo 'Hello from EC2!'" || terraform destroy -auto-approve
