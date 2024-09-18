@@ -26,10 +26,15 @@ set_up_files:
     dotenv:
       file: env
 
+# set_up_terraform:
+#   stage: setup
+#   needs: 
+#     - set_up_files
+#     artifacts: true
 set_up_terraform:
   stage: setup
   needs:
-    - set_up_files
+    - job: set_up_files
       artifacts: true
   before_script:
     - sudo apt update && sudo apt install -y terraform
