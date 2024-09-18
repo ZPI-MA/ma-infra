@@ -23,8 +23,8 @@ set_up_files:
     # - echo "TF_VAR_ssh_public_key=$(cat ~/.ssh/id_rsa.pub)" >> env
     - echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
   artifacts:
-    dotenv:
-      file: env
+    reports:
+      dotenv: env
 
 # set_up_terraform:
 #   stage: setup
@@ -51,8 +51,8 @@ build:
   after_script:
     - echo "EC2_PUBLIC_IP=$(terraform output public_ip)" >> env
   artifacts:
-    dotenv:
-      file: env
+    reports:
+      dotenv: env
 
 check_ec2_health:
   stage: healthcheck
