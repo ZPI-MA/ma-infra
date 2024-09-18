@@ -21,6 +21,7 @@ set_up_files:
     # - echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
     # - ssh-keygen -t rsa -b 4096 -C "franeksu@gmail.com" -f ~/.ssh/id_rsa -N ""
     # - echo "TF_VAR_ssh_public_key=$(cat ~/.ssh/id_rsa.pub)" >> env
+    - mkdir ~/.ssh/
     - echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
   # artifacts:
   #   reports:
