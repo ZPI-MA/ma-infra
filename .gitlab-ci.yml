@@ -48,6 +48,8 @@ set_up_terraform:
   script:
     - terraform init
     - terraform validate
+    - pwd
+    - ls -la
     - terraform plan
 
 build:
