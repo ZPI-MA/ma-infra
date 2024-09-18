@@ -22,9 +22,9 @@ set_up_files:
     # - ssh-keygen -t rsa -b 4096 -C "franeksu@gmail.com" -f ~/.ssh/id_rsa -N ""
     # - echo "TF_VAR_ssh_public_key=$(cat ~/.ssh/id_rsa.pub)" >> env
     - echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
-  artifacts:
-    reports:
-      dotenv: env
+  # artifacts:
+  #   reports:
+  #     dotenv: env
 
 # set_up_terraform:
 #   stage: setup
