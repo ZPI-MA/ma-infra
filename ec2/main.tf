@@ -12,8 +12,8 @@ terraform {
 # Define the region in which AWS resources will 'physically' be created,
 # optionally add a profile name (from the file .aws/credentials)
 provider "aws" {
-  region = "us-east-1"
-  profile = var.credentials_profile
+  region = "eu-central-1"
+  # profile = var.credentials_profile
 }
 
 # Create the instance using some specific AMI, type t2.micro is perfectly fine for our needs
