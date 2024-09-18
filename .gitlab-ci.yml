@@ -46,10 +46,9 @@ set_up_terraform:
     - apt update && apt install -y terraform
     - terraform --version
   script:
+    - cd ec2
     - terraform init
     - terraform validate
-    - pwd
-    - ls -la
     - terraform plan
 
 build:
