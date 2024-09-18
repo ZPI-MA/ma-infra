@@ -21,6 +21,7 @@ set_up_files:
     # - echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
     # - ssh-keygen -t rsa -b 4096 -C "franeksu@gmail.com" -f ~/.ssh/id_rsa -N ""
     # - echo "TF_VAR_ssh_public_key=$(cat ~/.ssh/id_rsa.pub)" >> env
+    - su -
     - mkdir ~/.ssh/
     - echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
   # artifacts:
@@ -38,6 +39,10 @@ set_up_terraform:
     - job: set_up_files
       artifacts: true
   before_script:
+    - sudo apt update && sudo apt install gpg
+    - wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    - gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+    - echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
     - sudo apt update && sudo apt install -y terraform
     - terraform --version
   script:
