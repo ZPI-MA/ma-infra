@@ -55,8 +55,8 @@ set_up_aws:
     - terraform apply -auto-approve
   after_script:
     - EC2_PUBLIC_IP="$(terraform output public_ip)"
-    - sleep 60
-    - ssh ec2-user@$EC2_PUBLIC_IP "echo 'Hello from EC2!'" || terraform destroy -auto-approve
+    - sleep 20
+    - ssh ubuntu@$EC2_PUBLIC_IP "echo 'Hello from EC2!'" || terraform destroy -auto-approve
   artifacts:
     reports:
       dotenv: env
