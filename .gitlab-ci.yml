@@ -14,27 +14,15 @@ default:
 set_up_files:
   stage: setup
   script:
-    # - echo "[default]" > ~/.aws/credentials
-    # - echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-    # - echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
-    # - ssh-keygen -t rsa -b 4096 -C "franeksu@gmail.com" -f ~/.ssh/id_rsa -N ""
-    # - echo "TF_VAR_ssh_public_key=$(cat ~/.ssh/id_rsa.pub)" >> env
     - su -
     - mkdir ~/.ssh/
     - echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
-  # artifacts:
-  #   reports:
-  #     dotenv: env
   artifacts:
     paths:
       - ~/.ssh/id_rsa
       - ~/.ssh/id_rsa.pub
 
-# set_up_terraform:
-#   stage: setup
-#   needs: 
-#     - set_up_files
-#     artifacts: true
+
 set_up_aws:
   stage: terraform
   needs:
@@ -57,12 +45,3 @@ set_up_aws:
     - EC2_PUBLIC_IP="$(terraform output public_ip)"
     - sleep 20
     - ssh ubuntu@$EC2_PUBLIC_IP "echo 'Hello from EC2!'" || terraform destroy -auto-approve
-  artifacts:
-    reports:
-      dotenv: env
-
-# check_ec2_health:
-#   stage: terraform
-#   script:
-#     - sleep 60
-#     - ssh ec2-user@$EC2_PUBLIC_IP "echo 'Hello from EC2!'" || terraform destroy -auto-approve
