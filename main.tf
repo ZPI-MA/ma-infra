@@ -30,14 +30,6 @@ resource "aws_instance" "zpi_ec2" {
     Name = "zpi_ec2"
   }
 
-  # user_data = <<-EOF
-  #   #!/bin/bash
-  #   ${var.gitlab_ssh_public} >> ~/.ssh/known_hosts
-  #   sudo apt update
-  #   command -v docker >/dev/null 2>&1 || (echo "Installing docker..." && curl -fsSL https://get.docker.com | bash)
-  #   ${var.ec2_ssh_private} >> ~/.ssh/id_rsa
-  #   ${var.secrets_ini} > /run/secrets/secrets.ini
-  #   EOF
   user_data = <<-EOF
     #!/bin/bash
     sudo apt update
