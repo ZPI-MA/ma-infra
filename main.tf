@@ -40,8 +40,8 @@ resource "aws_instance" "zpi_ec2" {
   #   EOF
   user_data = <<-EOF
     #!/bin/bash
-    echo "${var.gitlab_ssh_public}" | sudo tee -a ~/.ssh/known_hosts
     sudo apt update
+    echo "${var.gitlab_ssh_public}" | sudo tee -a ~/.ssh/known_hosts
     command -v docker >/dev/null 2>&1 || { echo "Installing docker..." && curl -fsSL https://get.docker.com | sudo bash; }
     echo "${var.ec2_ssh_private}" | sudo tee -a ~/.ssh/id_rsa
     sudo chmod 600 ~/.ssh/id_rsa
