@@ -11,7 +11,6 @@ variables:
   TF_VAR_gitlab_ssh_public: $GITLAB_SSH_PUBLIC
   TF_VAR_ec2_ssh_private: $EC2_SSH_PRIVATE
   TF_VAR_secrets_ini: $SECRETS_INI
-  # GITLAB_SSH_PRIVATE: $GITLAB_SSH_PRIVATE
 
 image:
   name: hashicorp/terraform:light
@@ -19,8 +18,6 @@ image:
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 before_script:
-  # - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
-  # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
   - rm -rf .terraform
   - terraform --version
   - terraform init
@@ -48,6 +45,7 @@ apply:
 destroy:
   stage: destroy
   script:
+    - terraform init 
     - terraform destroy -auto-approve
   when: manual
   dependencies: 
