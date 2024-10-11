@@ -4,7 +4,14 @@ variable "credentials_profile" {
   default     = "default"
 }
 
-# variable "ssh_public_key" {
-#     description = "Key used for SSH connections with EC2 instances"
-#     type        = string
-# }
+variable "gitlab_ssh_public" {
+  type = string
+}
+
+variable "ec2_ssh_private" {
+  type = string
+}
+
+variable "secrets_ini" {
+  type = string
+}
