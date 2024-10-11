@@ -41,11 +41,13 @@ apply:
     - terraform apply -auto-approve tfplan
   dependencies:
     - plan
+  artifacts:
+    paths:
+      - terraform.tfstate
 
 destroy:
   stage: destroy
   script:
-    - terraform init 
     - terraform destroy -auto-approve
   when: manual
   dependencies: 
