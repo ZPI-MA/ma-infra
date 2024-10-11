@@ -34,15 +34,15 @@ validate:
 plan:
   stage: plan
   script:
-    - terraform plan -out=./tfplan
+    - terraform plan -out=tfplan
   artifacts:
     paths:
-      - ./tfplan
+      - tfplan
 
 apply:
   stage: apply
   script:
-    - terraform apply -auto-approve ./tfplan
+    - terraform apply -auto-approve tfplan
   dependencies:
     - plan
 
