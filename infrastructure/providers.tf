@@ -1,7 +1,6 @@
 # PROVIDERS - AWS and Postgres
 provider "aws" {
   region  = "eu-central-1"
-  profile = "admin"
 }
 
 provider "postgresql" {
