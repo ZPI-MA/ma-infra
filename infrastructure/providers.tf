@@ -1,14 +1,4 @@
-# PROVIDERS - AWS and Postgres
-provider "aws" {
-  region  = "eu-central-1"
-}
-
-provider "postgresql" {
-  host            = aws_db_instance.postgres.address
-  port            = 5432
-  database        = var.db_name
-  username        = var.user_name
-  password        = var.user_password
-  sslmode         = "require"
-  connect_timeout = 15
+provider "hcp" {
+  client_id     = var.hcp_client_id
+  client_secret = var.hcp_client_secret
 }

@@ -1,3 +1,14 @@
+data "template_file" "secrets_ini" {
+  template = file("${path.module}/secrets.ini.tpl")
+  
+  vars = {
+    spotify_client_id     = var.secrets_spotify_client_id
+    spotify_client_secret = var.secrets_spotify_client_secret
+    database_user         = var.secrets_database_user
+    database_password     = var.secrets_database_password
+  }
+}
+
 resource "aws_instance" "ma_ec2" {
   ami                    = "ami-0e04bcbe83a83792e"
   instance_type          = "t2.micro"
@@ -17,6 +28,12 @@ resource "aws_instance" "ma_ec2" {
     echo "${var.ec2_ssh_private}" | sudo tee -a ~/.ssh/id_rsa
     sudo chmod 600 ~/.ssh/id_rsa
     sudo mkdir /run/secrets
-    echo "${var.secrets_ini}" | sudo tee -a /run/secrets/secrets.ini
-    EOF
+
+    # Create the .ini file
+    cat << ~'INIFILE' | sudo tee /run/secrets/secrets.ini
+      ${data.template_file.secrets_ini.rendered}
+    INIFILE
+
+    sudo chmod 600 /run/secrets/config.ini
+  EOF
 }
