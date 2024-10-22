@@ -47,18 +47,18 @@ plan:
     - terraform plan -out=tfplan
   artifacts:
     paths:
-      - infrastructure/tfplan
+      - tfplan
 
 apply:
   extends: .terraform_job
   stage: apply
   script:
-    - terraform apply -auto-approve infrastructure/tfplan
+    - terraform apply -auto-approve tfplan
   dependencies:
     - plan
   artifacts:
     paths:
-      - infrastructure/terraform.tfstate
+      - terraform.tfstate
 
 destroy:
   extends: .terraform_job
@@ -66,5 +66,6 @@ destroy:
   script:
     - terraform destroy -auto-approve
   when: manual
+  allow_failure: false
   dependencies: 
     - apply
