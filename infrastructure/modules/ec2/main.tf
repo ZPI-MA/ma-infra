@@ -30,9 +30,9 @@ resource "aws_instance" "ma_ec2" {
     sudo mkdir /run/secrets
 
     # Create the .ini file
-    cat << ~'INIFILE' | sudo tee /run/secrets/secrets.ini
-      ${data.template_file.secrets_ini.rendered}
-    INIFILE
+    cat << 'INIFILE' | sudo tee /run/secrets/secrets.ini
+    ${data.template_file.secrets_ini.rendered}
+  INIFILE
 
     sudo chmod 600 /run/secrets/config.ini
   EOF
