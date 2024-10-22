@@ -18,12 +18,22 @@ image:
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
-.terraform_job:
+.auto_job:
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"  # Only run on main branch
       when: always
-    # - if: $CI_COMMIT_REF_NAME == "network_rds"  # TESTING
-    #   when: always
+    - if: $CI_COMMIT_REF_NAME == "network_rds"  # TESTING
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never  # Prevention of running on merge requests
+    - when: never  # Don't run on any other branch
+
+.manual_job:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"  # Only run on main branch
+      when: manual
+    - if: $CI_COMMIT_REF_NAME == "network_rds"  # TESTING
+      when: manual
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never  # Prevention of running on merge requests
     - when: never  # Don't run on any other branch
@@ -35,13 +45,13 @@ before_script:
   - terraform init
 
 validate:
-  extends: .terraform_job
+  extends: .auto_job
   stage: validate
   script:
     - terraform validate
 
 plan:
-  # extends: .terraform_job
+  extends: .auto_job
   stage: plan
   script:
     - terraform plan -out=tfplan
@@ -52,7 +62,7 @@ plan:
       - ./infrastructure/tfplan
 
 apply:
-  # extends: .terraform_job
+  extends: .auto_job
   stage: apply
   script:
     - terraform apply -auto-approve tfplan
@@ -63,7 +73,7 @@ apply:
       - ./infrastructure/terraform.tfstate
 
 destroy:
-  # extends: .terraform_job
+  extends: .manual_job
   stage: destroy
   script:
     - terraform destroy -auto-approve
