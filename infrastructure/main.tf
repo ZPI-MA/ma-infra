@@ -20,13 +20,22 @@ module "network" {
   availability_zones   = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
 }
 
-module "rds_postgres" {
-  source               = "./modules/rds_postgres/"
-  private_subnet_ids = module.network.private_subnet_ids
-  private_subnet_sg_id = module.network.private_sg_id
-  postgres_identifier = "ma-rds-postgres"
-  postgres_port = 5432
-  db_name = "zpi"
-  user_name = var.user_name
-  user_password = var.user_password
+module "ec2" {
+  source              = "./modules/ec2/"
+  gitlab_ssh_public   = var.gitlab_ssh_public
+  ec2_ssh_private     = var.ec2_ssh_private
+  secrets_ini         = var.secrets_ini
+  public_subnet_id    = module.network.public_subnet_id
+  public_sg_id        = module.network.public_sg_id
 }
+
+# module "rds_postgres" {
+#   source               = "./modules/rds_postgres/"
+#   private_subnet_ids   = module.network.private_subnet_ids
+#   private_subnet_sg_id = module.network.private_sg_id
+#   postgres_identifier  = "ma-rds-postgres"
+#   postgres_port        = 5432
+#   db_name              = "zpi"
+#   user_name            = var.db_user_name
+#   user_password        = var.db_user_password
+# }
