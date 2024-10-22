@@ -11,7 +11,7 @@ variable "secrets_ini" {
 }
 
 variable "public_subnet_id" {
-  type        = list(string)
+  type        = string
   description = "ID of the Music Assistant public subnet"
 }
 
