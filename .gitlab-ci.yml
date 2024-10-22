@@ -47,7 +47,7 @@ plan:
     - terraform plan -out=tfplan
   artifacts:
     paths:
-      - tfplan
+      - ./infrastructure/tfplan
 
 apply:
   extends: .terraform_job
@@ -58,7 +58,7 @@ apply:
     - plan
   artifacts:
     paths:
-      - terraform.tfstate
+      - ./infrastructure/terraform.tfstate
 
 destroy:
   extends: .terraform_job
