@@ -17,17 +17,29 @@ image:
   entrypoint:
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+.terraform_job:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"  # Only run on main branch
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never  # Prevention of running on merge requests
+    - when: never  # Don't run on any other branch
+
+
 before_script:
   - rm -rf .terraform
   - terraform --version
   - terraform init
 
 validate:
+  extends: .terraform_job
   stage: validate
   script:
     - terraform validate
 
 plan:
+  extends: .terraform_job
   stage: plan
   script:
     - terraform plan -out=tfplan
@@ -36,6 +48,7 @@ plan:
       - tfplan
 
 apply:
+  extends: .terraform_job
   stage: apply
   script:
     - terraform apply -auto-approve tfplan
@@ -46,6 +59,7 @@ apply:
       - terraform.tfstate
 
 destroy:
+  extends: .terraform_job
   stage: destroy
   script:
     - terraform destroy -auto-approve

@@ -4,3 +4,4 @@ ec2/ec2-ssh.pem
 *backup*
 *.tfstate*
 *.terraform/
+*.env
