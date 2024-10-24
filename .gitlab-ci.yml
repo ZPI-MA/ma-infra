@@ -1,0 +1,79 @@
+stages:
+  - validate
+  - plan
+  - apply
+  - destroy
+
+variables:
+  TF_VAR_hcp_client_id: $HCP_CLIENT_ID
+  TF_VAR_hcp_client_secret: $HCP_CLIENT_SECRET
+
+image:
+  name: hashicorp/terraform:light
+  entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+.auto_job:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"  # Only run on main branch
+      when: always
+    # - if: $CI_COMMIT_REF_NAME == "network_rds"  # TESTING
+      # when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never  # Prevention of running on merge requests
+    - when: never  # Don't run on any other branch
+
+.manual_job:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"  # Only run on main branch
+      when: manual
+    # - if: $CI_COMMIT_REF_NAME == "network_rds"  # TESTING
+    #   when: manual
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never  # Prevention of running on merge requests
+    - when: never  # Don't run on any other branch
+
+before_script:
+  - cd infrastructure/
+  - rm -rf .terraform
+  - terraform --version
+  - terraform init
+
+validate:
+  extends: .auto_job
+  stage: validate
+  script:
+    - terraform validate
+
+plan:
+  extends: .auto_job
+  stage: plan
+  script:
+    - terraform plan -out=tfplan
+  dependencies: 
+    - validate
+  artifacts:
+    paths:
+      - ./infrastructure/tfplan
+
+apply:
+  extends: .auto_job
+  stage: apply
+  script:
+    - terraform apply -auto-approve tfplan
+  dependencies:
+    - plan
+  artifacts:
+    paths:
+      - ./infrastructure/terraform.tfstate
+
+destroy:
+  extends: .manual_job
+  stage: destroy
+  script:
+    - terraform destroy -auto-approve
+  when: manual
+  allow_failure: false
+  dependencies: 
+    - apply
