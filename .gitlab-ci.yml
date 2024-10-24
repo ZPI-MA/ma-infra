@@ -36,23 +36,15 @@ image:
       when: never  # Prevention of running on merge requests
     - when: never  # Don't run on any other branch
 
-init:
-  extends: .auto_job
-  stage: init
-  script:
-    - cd ${TF_ROOT}
-    - rm -rf .terraform
-    - terraform init
-  artifacts:
-    paths:
-      - ${TF_ROOT}/**/*.sh   # Include shell scripts
-      - ${TF_ROOT}/**/*.tpl  # Include template files
+before_script:
+  - cd ${TF_ROOT}
+  - rm -rf .terraform
+  - terraform --version
+  - terraform init
 
 validate:
   extends: .auto_job
   stage: validate
-  dependencies:
-    - init
   script:
     - terraform validate
 
@@ -60,19 +52,19 @@ plan:
   extends: .auto_job
   stage: plan
   dependencies:
-    - init
     - validate
   script:
     - terraform plan -out=tfplan
   artifacts:
     paths:
       - ${TF_ROOT}/tfplan
+      - ${TF_ROOT}/**/*.sh
+      - ${TF_ROOT}/**/*.tpl
 
 apply:
   extends: .auto_job
   stage: apply
   dependencies:
-    - init
     - plan
   script:
     - terraform apply -auto-approve tfplan
@@ -84,7 +76,6 @@ destroy:
   extends: .manual_job
   stage: destroy
   dependencies:
-    - init
     - apply
   script:
     - terraform destroy -auto-approve
