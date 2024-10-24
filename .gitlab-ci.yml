@@ -1,4 +1,5 @@
 stages:
+  - init
   - validate
   - plan
   - apply
@@ -7,6 +8,7 @@ stages:
 variables:
   TF_VAR_hcp_client_id: $HCP_CLIENT_ID
   TF_VAR_hcp_client_secret: $HCP_CLIENT_SECRET
+  TF_ROOT: ${CI_PROJECT_DIR}/infrastructure
 
 image:
   name: hashicorp/terraform:light
@@ -34,46 +36,63 @@ image:
       when: never  # Prevention of running on merge requests
     - when: never  # Don't run on any other branch
 
-before_script:
-  - cd infrastructure/
-  - rm -rf .terraform
-  - terraform --version
-  - terraform init
+init:
+  extends: .auto_job
+  stage: init
+  script:
+    - cd ${TF_ROOT}
+    - rm -rf .terraform
+    - terraform init
+  artifacts:
+    paths:
+      - ${TF_ROOT}/.terraform
+      - ${TF_ROOT}/**/*.tf
+      - ${TF_ROOT}/**/*.sh   # Include shell scripts
+      - ${TF_ROOT}/**/*.tpl  # Include template files
 
 validate:
   extends: .auto_job
   stage: validate
+  dependencies:
+    - init
   script:
+    - cd ${TF_ROOT}
     - terraform validate
 
 plan:
   extends: .auto_job
   stage: plan
-  script:
-    - terraform plan -out=tfplan
-  dependencies: 
+  dependencies:
+    - init
     - validate
+  script:
+    - cd ${TF_ROOT}
+    - terraform plan -out=tfplan
   artifacts:
     paths:
-      - ./infrastructure/tfplan
+      - ${TF_ROOT}/tfplan
 
 apply:
   extends: .auto_job
   stage: apply
-  script:
-    - terraform apply -auto-approve tfplan
   dependencies:
+    - init
     - plan
+  script:
+    - cd ${TF_ROOT}
+    - terraform apply -auto-approve tfplan
   artifacts:
     paths:
-      - ./infrastructure/terraform.tfstate
+      - ${TF_ROOT}/terraform.tfstate
 
 destroy:
   extends: .manual_job
   stage: destroy
+  dependencies:
+    - init
+    - apply
   script:
+    - cd ${TF_ROOT}
     - terraform destroy -auto-approve
   when: manual
   allow_failure: false
-  dependencies: 
-    - apply
