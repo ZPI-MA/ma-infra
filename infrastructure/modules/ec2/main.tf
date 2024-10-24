@@ -20,20 +20,9 @@ resource "aws_instance" "ma_ec2" {
     Name = "Music Assistant EC2 instance"
   }
 
-  user_data = <<-EOF
-    #!/bin/bash
-    sudo apt update
-    echo "${var.gitlab_ssh_public}" | sudo tee -a ~/.ssh/known_hosts
-    command -v docker >/dev/null 2>&1 || { echo "Installing docker..." && curl -fsSL https://get.docker.com | sudo bash; }
-    echo "${var.ec2_ssh_private}" | sudo tee -a ~/.ssh/id_rsa
-    sudo chmod 600 ~/.ssh/id_rsa
-    sudo mkdir /run/secrets
-
-    # Create the .ini file
-    cat << 'ENDFILE' | sudo tee /run/secrets/secrets.ini
-${data.template_file.secrets_ini.rendered}
-ENDFILE
-
-    sudo chmod 600 /run/secrets/secrets.ini
-  EOF
+  user_data = templatefile("${path.module}/ec2_init.sh", {
+    gitlab_ssh_public = var.gitlab_ssh_public
+    ec2_ssh_private   = var.ec2_ssh_private
+    secrets_ini       = data.template_file.secrets_ini.rendered
+  })
 }
