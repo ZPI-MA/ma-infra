@@ -4,17 +4,17 @@ provider "hcp" {
 }
 
 provider "postgresql" {
-  host            = aws_db_instance.postgres.address
+  host            = module.rds[0].db_instance_address
   port            = 5432
-  database        = var.db_name
-  username        = var.user_name
-  password        = var.user_password
+  database        = data.hcp_vault_secrets_app.postgres.secrets["db_name"]
+  username        = data.hcp_vault_secrets_app.postgres.secrets["user_name"]
+  password        = data.hcp_vault_secrets_app.postgres.secrets["user_password"]
   sslmode         = "require"
   connect_timeout = 15
 }
 
 provider "aws" {
   region     = "eu-central-1"
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  access_key = data.hcp_vault_secrets_app.aws.secrets["access_key"]
+  secret_key = data.hcp_vault_secrets_app.aws.secrets["secret_key"]
 }

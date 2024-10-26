@@ -67,7 +67,7 @@ module "ec2" {
   public_sg_id                  = module.network.public_sg_id
 }
 
-module "rds_postgres" {
+module "rds" {
   count                = var.is_prod ? 1 : 0
   source               = "./modules/rds/"
 
@@ -80,7 +80,7 @@ module "rds_postgres" {
   postgres_port        = 5432
 
   # Db config and credentials
-  db_name              = "zpi"
-  user_name            = var.db_user_name
-  user_password        = var.db_user_password
+  db_name              = data.hcp_vault_secrets_app.postgres.secrets["db_name"]
+  user_name            = data.hcp_vault_secrets_app.postgres.secrets["user_name"]
+  user_password        = data.hcp_vault_secrets_app.postgres.secrets["user_password"]
 }

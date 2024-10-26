@@ -4,6 +4,6 @@ output "ec2_public_ip" {
 }
 
 output "rds_endpoint" {
-  value       = var.is_prod ? module.rds_postgres[0].db_instance_endpoint : null
+  value       = var.is_prod ? module.rds[0].db_instance_endpoint : null
   description = "The connection endpoint for the RDS PostgreSQL instance"
 }
