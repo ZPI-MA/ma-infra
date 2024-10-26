@@ -76,7 +76,7 @@ module "ec2" {
 
 module "rds_postgres" {
   count                = var.is_prod ? 1 : 0
-  source               = "./modules/rds_postgres/"
+  source               = "./modules/rds/"
 
   # Network config
   private_subnet_ids   = module.network.private_subnet_ids
