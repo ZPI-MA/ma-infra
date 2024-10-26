@@ -40,9 +40,6 @@ data "hcp_vault_secrets_app" "ssh" {
 module "network" {
   source               = "./modules/network/"
 
-  aws_access_key       = data.hcp_vault_secrets_app.aws.secrets["access_key"]
-  aws_secret_key       = data.hcp_vault_secrets_app.aws.secrets["secret_key"]
-
   public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   private_subnet_cidrs = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   availability_zones   = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
@@ -50,10 +47,6 @@ module "network" {
 
 module "ec2" {
   source                        = "./modules/ec2/"
-
-  # AWS credentials
-  aws_access_key                = data.hcp_vault_secrets_app.aws.secrets["access_key"]
-  aws_secret_key                = data.hcp_vault_secrets_app.aws.secrets["secret_key"]
 
   # SSH keys
   gitlab_ssh_public             = data.hcp_vault_secrets_app.ssh.secrets["gitlab_ssh_public"]
