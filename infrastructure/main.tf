@@ -59,6 +59,10 @@ module "ec2" {
   gitlab_ssh_public             = data.hcp_vault_secrets_app.ssh.secrets["gitlab_ssh_public"]
   ec2_ssh_private               = data.hcp_vault_secrets_app.ssh.secrets["ec2_ssh_private"]
 
+  # DuckDNS credentials
+  duckdns_domain                = data.hcp_vault_secrets_app.duckdns.secrets["domain"]
+  duckdns_token                 = data.hcp_vault_secrets_app.duckdns.secrets["token"]
+
   # Secrets that will be passed to the secrets.ini file
   secrets_spotify_client_id     = data.hcp_vault_secrets_app.spotify.secrets["client_id"]
   secrets_spotify_client_secret = data.hcp_vault_secrets_app.spotify.secrets["client_secret"]
@@ -68,4 +72,22 @@ module "ec2" {
   # Network config
   public_subnet_id              = module.network.public_subnet_id
   public_sg_id                  = module.network.public_sg_id
+}
+
+module "rds_postgres" {
+  count                = var.is_prod ? 1 : 0
+  source               = "./modules/rds_postgres/"
+
+  # Network config
+  private_subnet_ids   = module.network.private_subnet_ids
+  private_subnet_sg_id = module.network.private_sg_id
+
+  # Postgres config
+  postgres_identifier  = "ma-rds-postgres"
+  postgres_port        = 5432
+
+  # Db config and credentials
+  db_name              = "zpi"
+  user_name            = var.db_user_name
+  user_password        = var.db_user_password
 }

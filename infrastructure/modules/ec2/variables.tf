@@ -18,6 +18,15 @@ variable "ec2_ssh_private" {
   sensitive = true
 }
 
+variable "duckdns_domain" {
+  type      = string
+}
+
+variable "duckdns_token" {
+  type      = string
+  sensitive = true
+}
+
 variable "secrets_spotify_client_id" {
   type      = string
   sensitive = true

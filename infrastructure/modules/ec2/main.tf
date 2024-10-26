@@ -6,6 +6,8 @@ data "template_file" "secrets_ini" {
     spotify_client_secret = var.secrets_spotify_client_secret
     database_user         = var.secrets_database_user
     database_password     = var.secrets_database_password
+    duckdns_domain        = var.duckdns_domain
+    duckdns_token         = var.duckdns_token
   }
 }
 

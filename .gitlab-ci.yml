@@ -8,6 +8,7 @@ stages:
 variables:
   TF_VAR_hcp_client_id: $HCP_CLIENT_ID
   TF_VAR_hcp_client_secret: $HCP_CLIENT_SECRET
+  TF_VAR_is_prod: $IS_PROD
   TF_ROOT: ${CI_PROJECT_DIR}/infrastructure
 
 image:

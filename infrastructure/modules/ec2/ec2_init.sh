@@ -13,3 +13,6 @@ ${secrets_ini}
 ENDFILE
 
 chmod 600 /run/secrets/secrets.ini
+
+mkdir -p ~/duckdns
+echo url="https://www.duckdns.org/update?domains=${duckdns_domain}&token=${duckdns_token}&ip=" | curl -k -o ~/duckdns/duck.log -K -
