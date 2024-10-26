@@ -6,8 +6,6 @@ data "template_file" "secrets_ini" {
     spotify_client_secret = var.secrets_spotify_client_secret
     database_user         = var.secrets_database_user
     database_password     = var.secrets_database_password
-    duckdns_domain        = var.duckdns_domain
-    duckdns_token         = var.duckdns_token
   }
 }
 
@@ -25,6 +23,8 @@ resource "aws_instance" "ma_ec2" {
   user_data = templatefile("${path.module}/ec2_init.sh", {
     gitlab_ssh_public = var.gitlab_ssh_public
     ec2_ssh_private   = var.ec2_ssh_private
+    duckdns_domain    = var.duckdns_domain
+    duckdns_token     = var.duckdns_token
     secrets_ini       = data.template_file.secrets_ini.rendered
   })
 }
