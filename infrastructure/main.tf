@@ -48,6 +48,9 @@ module "network" {
 module "ec2" {
   source                        = "./modules/ec2/"
 
+  # EC2 config
+  instance_type                 = var.is_prod ? "t2.medium" : "t2.micro"
+
   # SSH keys
   gitlab_ssh_public             = data.hcp_vault_secrets_app.ssh.secrets["gitlab_ssh_public"]
   ec2_ssh_private               = data.hcp_vault_secrets_app.ssh.secrets["ec2_ssh_private"]

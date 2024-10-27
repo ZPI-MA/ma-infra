@@ -81,4 +81,4 @@ destroy:
   script:
     - terraform destroy -auto-approve
   when: manual
-  allow_failure: false
+  # allow_failure: false

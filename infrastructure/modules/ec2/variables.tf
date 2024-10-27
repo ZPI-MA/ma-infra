@@ -1,3 +1,7 @@
+variable "instance_type" {
+  type = string
+}
+
 variable "gitlab_ssh_public" {
   type      = string
   sensitive = true
@@ -35,7 +39,7 @@ variable "secrets_database_user" {
 variable "secrets_database_password" {
   type      = string
   sensitive = true
-}    
+}
 
 variable "public_subnet_id" {
   type        = string

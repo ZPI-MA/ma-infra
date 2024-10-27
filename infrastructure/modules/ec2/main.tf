@@ -10,8 +10,9 @@ data "template_file" "secrets_ini" {
 }
 
 resource "aws_instance" "ma_ec2" {
-  ami                    = "ami-0e04bcbe83a83792e"
-  instance_type          = "t2.micro"
+  # ami                    = "ami-0e04bcbe83a83792e"
+  ami                    = "ami-0084a47cc718c111a"
+  instance_type          = var.instance_type
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [var.public_sg_id]
   key_name               = "ec2-ssh"
