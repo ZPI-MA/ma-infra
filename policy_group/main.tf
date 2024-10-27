@@ -133,6 +133,7 @@ resource "aws_iam_policy" "ci_cd_policies" {
         "route53:UpdateHealthCheck",
         "route53:DeleteHealthCheck",
         "rds:Describe*",
+        "rds:AddTagsToResource",
         "rds:ListTagsForResource",
         "rds:CreateDBInstance",
         "rds:CreateDBSubnetGroup",

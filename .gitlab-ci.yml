@@ -72,13 +72,13 @@ apply:
   artifacts:
     paths:
       - ${TF_ROOT}/terraform.tfstate
+    when: always
 
 destroy:
   extends: .manual_job
   stage: destroy
-  dependencies:
-    - apply
+  # dependencies:
+  #   - apply
   script:
     - terraform destroy -auto-approve
   when: manual
-  # allow_failure: false
