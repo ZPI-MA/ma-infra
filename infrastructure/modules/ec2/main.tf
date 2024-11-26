@@ -7,7 +7,7 @@ resource "aws_instance" "ma_ec2" {
   key_name               = "ec2-ssh"
 
   tags = {
-    Name = "ZPI-EC2-${count.index}"
+    Name = "ZPI-EC2-single"
   }
 
   #  user_data = count.index == 0 ? local.first_manager_user_data : local.other_manager_user_data
