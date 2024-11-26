@@ -24,7 +24,6 @@ resource "aws_instance" "ma_ec2" {
     sudo groupadd docker || true
     sudo usermod -aG docker ubuntu
     
-    timeout 60 bash -c 'until sudo docker info >/dev/null 2>&1; do sleep 1; done'
     printf "${var.secrets_spotify_client_id}" | sudo docker secret create spotify_client_id -
     printf "${var.secrets_spotify_client_secret}" | sudo docker secret create spotify_client_secret -
     printf "${var.secrets_database_user}" | sudo docker secret create db_user -
