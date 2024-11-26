@@ -67,6 +67,38 @@ resource "aws_security_group" "ma_public_sg" {
   vpc_id = aws_vpc.ma_vpc.id
 
   ingress {
+    from_port         = 2377
+    to_port           = 2377
+    protocol          = "tcp"
+    self             = true  # This allows communication within the security group
+    description       = "Swarm cluster management"
+  }
+
+  ingress {
+    from_port         = 7946
+    to_port           = 7946
+    protocol          = "tcp"
+    self             = true
+    description       = "Swarm node communication TCP"
+  }
+
+  ingress {
+    from_port         = 7946
+    to_port           = 7946
+    protocol          = "udp"
+    self             = true
+    description       = "Swarm node communication UDP"
+  }
+
+  ingress {
+    from_port         = 4789
+    to_port           = 4789
+    protocol          = "udp"
+    self             = true
+    description       = "Swarm overlay network"
+  }
+
+  ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
