@@ -20,11 +20,18 @@ resource "aws_instance" "ma_ec2" {
     sudo chmod 600 ~/.ssh/id_rsa
 
     command -v docker >/dev/null 2>&1 || { echo "Installing docker..." && curl -fsSL https://get.docker.com | sudo bash; }
-    printf "${var.secrets_spotify_client_id}" | docker secret create spotify-client-id -
-    printf "${var.secrets_spotify_client_secret}" | docker secret create spotify-client-secret -
-    printf "${var.secrets_database_user}" | docker secret create db-user -
-    printf "${var.secrets_database_password}" | docker secret create db-password -
+
+    sudo groupadd docker || true
+    sudo usermod -aG docker ubuntu
+    
+    newgrp docker <<NESTED
+    timeout 30 bash -c 'until docker info >/dev/null 2>&1; do sleep 1; done'
+    printf "${var.secrets_spotify_client_id}" | docker secret create spotify_client_id -
+    printf "${var.secrets_spotify_client_secret}" | docker secret create spotify_client_secret -
+    printf "${var.secrets_database_user}" | docker secret create db_user -
+    printf "${var.secrets_database_password}" | docker secret create db_password -
     docker login registry.gitlab.com -u sunba23 -p ${var.secrets_gitlab_access_token}
     docker swarm init
+  NESTED
   EOF
 }
