@@ -10,7 +10,7 @@ resource "aws_instance" "ma_ec2" {
     Name = "ZPI-EC2-${count.index}"
   }
 
-  user_data = count.index == 0 ? locals.first_manager_user_data : locals.other_manager_user_data
+  user_data = count.index == 0 ? local.first_manager_user_data : local.other_manager_user_data
 }
 
 locals {
