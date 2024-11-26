@@ -37,6 +37,10 @@ data "hcp_vault_secrets_app" "ssh" {
   app_name = "ssh"
 }
 
+data "hcp_vault_secrets_app" "gitlab" {
+  app_name = "gitlab-container-registry"
+}
+
 module "network" {
   source               = "./modules/network/"
 
@@ -59,11 +63,12 @@ module "ec2" {
   gitlab_ssh_public             = data.hcp_vault_secrets_app.ssh.secrets["gitlab_ssh_public"]
   ec2_ssh_private               = data.hcp_vault_secrets_app.ssh.secrets["ec2_ssh_private"]
 
-  # Secrets that will be passed to the secrets.ini file
+  # Secrets that will be passed to docker secret create command
   secrets_spotify_client_id     = data.hcp_vault_secrets_app.spotify.secrets["client_id"]
   secrets_spotify_client_secret = data.hcp_vault_secrets_app.spotify.secrets["client_secret"]
   secrets_database_user         = data.hcp_vault_secrets_app.postgres.secrets["user_name"]
   secrets_database_password     = data.hcp_vault_secrets_app.postgres.secrets["user_password"]
+  secrets_gitlab_access_token   = data.hcp_vault_secrets_app.gitlab.secrets["access_token"]
 
   # Network config
   public_subnet_id              = module.network.public_subnet_id

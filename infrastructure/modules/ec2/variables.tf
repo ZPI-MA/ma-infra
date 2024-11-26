@@ -38,6 +38,11 @@ variable "secrets_database_password" {
   sensitive = true
 }    
 
+variable "secrets_gitlab_access_token" {
+  type = string
+  sensitive = true
+}
+
 variable "public_subnet_id" {
   type        = string
   description = "ID of the Music Assistant public subnet"
