@@ -1,4 +1,4 @@
-resource "aws_instance" "ma_ec2" {
+resource "aws_instance" "first_manager" {
   ami                    = "ami-0e04bcbe83a83792e"
   instance_type          = "t2.micro"
   subnet_id              = var.public_subnet_id
