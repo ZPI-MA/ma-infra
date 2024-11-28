@@ -9,6 +9,6 @@ output "first_public_ip" {
 }
 
 output "other_public_ip" {
-  value       = module.ec2.other_instance_public_ip
+  value       = module.ec2.other_instances_public_ips
   description = "Public IP address of other manager EC2 instances"
 }
