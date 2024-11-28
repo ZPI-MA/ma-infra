@@ -36,7 +36,7 @@ resource "aws_instance" "first_manager" {
 
 resource "aws_instance" "other_managers" {
   count                  = 2
-  ami                    = "ami-0e04bcbe83a83792e"
+  ami                    = data.aws_ami.amazon_linux_2.id
   instance_type          = "t2.micro"
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [var.public_sg_id]
