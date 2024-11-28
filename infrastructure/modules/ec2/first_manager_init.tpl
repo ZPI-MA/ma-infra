@@ -30,4 +30,4 @@ printf "${secrets_spotify_client_secret}" | sudo docker secret create spotify_cl
 printf "${secrets_database_user}" | sudo docker secret create db_user -
 printf "${secrets_database_password}" | sudo docker secret create db_password -
 
-sudo docker login registry.gitlab.com -u sunba23 -p ${var.secrets_gitlab_access_token}
+sudo docker login registry.gitlab.com -u sunba23 -p ${secrets_gitlab_access_token}

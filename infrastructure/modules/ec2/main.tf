@@ -30,7 +30,7 @@ resource "aws_instance" "first_manager" {
     secrets_spotify_client_secret = var.secrets_spotify_client_secret
     secrets_database_user         = var.secrets_database_user
     secrets_database_password     = var.secrets_database_password
-    gitlab_access_token           = var.gitlab_access_token
+    secrets_gitlab_access_token   = var.secrets_gitlab_access_token
   })
 }
 
@@ -50,9 +50,10 @@ resource "aws_instance" "other_managers" {
   depends_on = [aws_instance.first_manager]
 
   user_data = templatefile("${path.module}/other_manager_init.tpl", {
-    region               = data.aws_region.current.name
-    gitlab_ssh_public    = var.gitlab_ssh_public
-    ec2_ssh_private      = var.ec2_ssh_private
+    region                       = data.aws_region.current.name
+    gitlab_ssh_public            = var.gitlab_ssh_public
+    ec2_ssh_private              = var.ec2_ssh_private
+    secrets_gitlab_access_token  = var.secrets_gitlab_access_token
   })
 }
 
