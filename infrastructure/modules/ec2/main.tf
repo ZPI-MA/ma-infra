@@ -21,10 +21,6 @@ resource "aws_instance" "first_manager" {
   }
 
   user_data = templatefile("${path.module}/first_manager_init.tpl", {
-    gitlab_ssh_public    = var.gitlab_ssh_public
-    ec2_ssh_private      = var.ec2_ssh_private
-  })
-  user_data = templatefile("${path.module}/first_manager_init.tpl", {
     region                        = data.aws_region.current.name
     gitlab_ssh_public             = var.gitlab_ssh_public
     ec2_ssh_private               = var.ec2_ssh_private

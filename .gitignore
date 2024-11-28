@@ -5,3 +5,4 @@ ec2/ec2-ssh.pem
 *.tfstate*
 *.terraform/
 *.env
+*.lock.hcl
