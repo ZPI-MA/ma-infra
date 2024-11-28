@@ -8,6 +8,8 @@ data "aws_ami" "amazon_linux_2" {
   }
 }
 
+data "aws_region" "current" {}
+
 resource "aws_instance" "first_manager" {
   ami                    = data.aws_ami.amazon_linux_2.id
   instance_type          = "t2.micro"
