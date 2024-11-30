@@ -44,9 +44,6 @@ data "hcp_vault_secrets_app" "gitlab" {
 module "network" {
   source               = "./modules/network/"
 
-  aws_access_key       = data.hcp_vault_secrets_app.aws.secrets["access_key"]
-  aws_secret_key       = data.hcp_vault_secrets_app.aws.secrets["secret_key"]
-
   public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   private_subnet_cidrs = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   availability_zones   = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
@@ -55,13 +52,17 @@ module "network" {
 module "ec2" {
   source                        = "./modules/ec2/"
 
-  # AWS credentials
-  aws_access_key                = data.hcp_vault_secrets_app.aws.secrets["access_key"]
-  aws_secret_key                = data.hcp_vault_secrets_app.aws.secrets["secret_key"]
+  # EC2 config
+  instance_type                 = "t2.micro"
 
   # SSH keys
   gitlab_ssh_public             = data.hcp_vault_secrets_app.ssh.secrets["gitlab_ssh_public"]
   ec2_ssh_private               = data.hcp_vault_secrets_app.ssh.secrets["ec2_ssh_private"]
+
+  # Secrets that will be passed to docker secret create command
+  # DuckDNS credentials
+  duckdns_domain                = data.hcp_vault_secrets_app.duckdns.secrets["domain"]
+  duckdns_token                 = data.hcp_vault_secrets_app.duckdns.secrets["token"]
 
   # Secrets that will be passed to docker secret create command
   secrets_spotify_client_id     = data.hcp_vault_secrets_app.spotify.secrets["client_id"]
@@ -70,18 +71,26 @@ module "ec2" {
   secrets_database_password     = data.hcp_vault_secrets_app.postgres.secrets["user_password"]
   secrets_gitlab_access_token   = data.hcp_vault_secrets_app.gitlab.secrets["access_token"]
 
+
   # Network config
   public_subnet_id              = module.network.public_subnet_id
   public_sg_id                  = module.network.public_sg_id
 }
 
-module "rds_postgres" {
-  source               = "./modules/rds_postgres/"
+module "rds" {
+  count                = var.is_prod ? 1 : 0
+  source               = "./modules/rds/"
+
+  # Network config
   private_subnet_ids   = module.network.private_subnet_ids
   private_subnet_sg_id = module.network.private_sg_id
-  postgres_identifier  = "ma-rds-postgres"
+
+  # Postgres config
+  postgres_identifier  = "ma-rds"
   postgres_port        = 5432
-  db_name              = "zpi"
-  user_name            = var.db_user_name
-  user_password        = var.db_user_password
+
+  # Db config and credentials
+  db_name              = data.hcp_vault_secrets_app.postgres.secrets["db_name"]
+  user_name            = data.hcp_vault_secrets_app.postgres.secrets["user_name"]
+  user_password        = data.hcp_vault_secrets_app.postgres.secrets["user_password"]
 }

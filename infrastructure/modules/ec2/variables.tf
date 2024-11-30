@@ -1,11 +1,5 @@
-variable "aws_access_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "aws_secret_key" {
-  type      = string
-  sensitive = true
+variable "instance_type" {
+  type = string
 }
 
 variable "gitlab_ssh_public" {
@@ -14,6 +8,15 @@ variable "gitlab_ssh_public" {
 }
 
 variable "ec2_ssh_private" {
+  type      = string
+  sensitive = true
+}
+
+variable "duckdns_domain" {
+  type      = string
+}
+
+variable "duckdns_token" {
   type      = string
   sensitive = true
 }
@@ -36,7 +39,7 @@ variable "secrets_database_user" {
 variable "secrets_database_password" {
   type      = string
   sensitive = true
-}    
+}
 
 variable "secrets_gitlab_access_token" {
   type = string

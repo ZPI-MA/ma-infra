@@ -11,7 +11,7 @@ resource "aws_db_instance" "postgres" {
   allocated_storage         = 20
   storage_type              = "gp2"  # Default one, from docs: "gp2" (general purpose SSD)
   engine                    = "postgres"
-  engine_version            = "16.4"  # Version 17 - Beta
+  engine_version            = "16.4"
   instance_class            = "db.t4g.small"
   identifier                = var.postgres_identifier
   db_name                   = var.db_name

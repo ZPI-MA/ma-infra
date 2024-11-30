@@ -12,7 +12,7 @@ data "aws_region" "current" {}
 
 resource "aws_instance" "first_manager" {
   ami                    = data.aws_ami.amazon_linux_2.id
-  instance_type          = "t2.micro"
+  instance_type          = var.instance_type
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [var.public_sg_id]
   key_name               = "ec2-ssh"
@@ -31,13 +31,16 @@ resource "aws_instance" "first_manager" {
     secrets_database_user         = var.secrets_database_user
     secrets_database_password     = var.secrets_database_password
     secrets_gitlab_access_token   = var.secrets_gitlab_access_token
+    duckdns_domain                = var.duckdns_domain
+    duckdns_token                 = var.duckdns_token
+
   })
 }
 
 resource "aws_instance" "other_managers" {
   count                  = 2
   ami                    = data.aws_ami.amazon_linux_2.id
-  instance_type          = "t2.micro"
+  instance_type          = var.instance_type
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [var.public_sg_id]
   key_name               = "ec2-ssh"

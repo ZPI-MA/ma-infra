@@ -5,6 +5,9 @@ echo "${gitlab_ssh_public}" | sudo tee -a ~/.ssh/known_hosts
 echo "${ec2_ssh_private}" | sudo tee -a ~/.ssh/id_rsa
 sudo chmod 600 ~/.ssh/id_rsa
 
+mkdir -p ~/duckdns
+echo url="https://www.duckdns.org/update?domains=${duckdns_domain}&token=${duckdns_token}&ip=" | curl -k -o ~/duckdns/duck.log -K -
+
 sudo amazon-linux-extras install docker
 sudo service docker start
 sudo usermod -a -G docker ec2-user
