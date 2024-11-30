@@ -13,11 +13,6 @@ variable "postgres_identifier" {
   type        = string
 }
 
-# variable "postgres_instance_name" {
-#   description = "Unique name across all database instances owned by current AWS account."
-#   type        = string
-# }
-
 variable "postgres_port" {
   description = "Port for PostgreSQL. Default = 5432."
   type        = string
@@ -27,10 +22,6 @@ variable "postgres_port" {
 variable "db_name" {
   type = string
 }
-
-# variable "db_password" {
-#   type = string
-# }
 
 variable "user_name" {
   type        = string

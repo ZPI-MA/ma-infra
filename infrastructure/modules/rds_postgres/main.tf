@@ -1,30 +1,3 @@
-# resource "aws_security_group" "rds_sec_group" {
-#   name        = "rds_sec_group"
-#   vpc_id      = "vpc-0cc2de897ab807d2d"
-#   description = "Security group for accessing RDS database"
-
-#   # Incoming traffic - enable selected port
-#   ingress {
-#     from_port   = var.postgres_port
-#     to_port     = var.postgres_port
-#     protocol    = "tcp"
-#     description = "PostgreSQL"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-
-#   # Enable whole outcoming traffic
-#   egress {
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-
-#   tags = {
-#     Name = "rds_sec_group"
-#   }
-# }
-
 resource "aws_db_subnet_group" "ma_private_subnet" {
   name       = "ma-private-subnet-group"
   subnet_ids = var.private_subnet_ids
@@ -39,7 +12,7 @@ resource "aws_db_instance" "postgres" {
   storage_type              = "gp2"  # Default one, from docs: "gp2" (general purpose SSD)
   engine                    = "postgres"
   engine_version            = "16.4"  # Version 17 - Beta
-  instance_class            = "db.t3.micro"  # Free tier eligible
+  instance_class            = "db.t4g.small"
   identifier                = var.postgres_identifier
   db_name                   = var.db_name
   username                  = var.user_name  # Username of master db user

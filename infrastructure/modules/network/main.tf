@@ -9,10 +9,10 @@ resource "aws_vpc" "ma_vpc" {
 
 # Public subnets in all 3 AZs
 resource "aws_subnet" "ma_public_subnets" {
-  count             = length(var.public_subnet_cidrs)
-  vpc_id            = aws_vpc.ma_vpc.id
-  cidr_block        = element(var.public_subnet_cidrs, count.index)
-  availability_zone = element(var.availability_zones, count.index)
+  count                   = length(var.public_subnet_cidrs)
+  vpc_id                  = aws_vpc.ma_vpc.id
+  cidr_block              = element(var.public_subnet_cidrs, count.index)
+  availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = true  # Automatically assign public IPs to instances
 
   tags = {
@@ -67,35 +67,35 @@ resource "aws_security_group" "ma_public_sg" {
   vpc_id = aws_vpc.ma_vpc.id
 
   ingress {
-    from_port         = 2377
-    to_port           = 2377
-    protocol          = "tcp"
-    self             = true  # This allows communication within the security group
-    description       = "Swarm cluster management"
+    from_port   = 2377
+    to_port     = 2377
+    protocol    = "tcp"
+    self        = true  # This allows communication within the security group
+    description = "Swarm cluster management"
   }
 
   ingress {
-    from_port         = 7946
-    to_port           = 7946
-    protocol          = "tcp"
-    self             = true
-    description       = "Swarm node communication TCP"
+    from_port   = 7946
+    to_port     = 7946
+    protocol    = "tcp"
+    self        = true
+    description = "Swarm node communication TCP"
   }
 
   ingress {
-    from_port         = 7946
-    to_port           = 7946
-    protocol          = "udp"
-    self             = true
-    description       = "Swarm node communication UDP"
+    from_port   = 7946
+    to_port     = 7946
+    protocol    = "udp"
+    self        = true
+    description = "Swarm node communication UDP"
   }
 
   ingress {
-    from_port         = 4789
-    to_port           = 4789
-    protocol          = "udp"
-    self             = true
-    description       = "Swarm overlay network"
+    from_port   = 4789
+    to_port     = 4789
+    protocol    = "udp"
+    self        = true
+    description = "Swarm overlay network"
   }
 
   ingress {
@@ -136,10 +136,10 @@ resource "aws_security_group" "ma_private_sg" {
   vpc_id = aws_vpc.ma_vpc.id
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"  # Allow all traffic
-    security_groups = [aws_security_group.ma_public_sg.id]  # Only from public SG
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    security_groups = [aws_security_group.ma_public_sg.id]
   }
 
   egress {

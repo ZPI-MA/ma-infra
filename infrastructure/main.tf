@@ -75,13 +75,13 @@ module "ec2" {
   public_sg_id                  = module.network.public_sg_id
 }
 
-# module "rds_postgres" {
-#   source               = "./modules/rds_postgres/"
-#   private_subnet_ids   = module.network.private_subnet_ids
-#   private_subnet_sg_id = module.network.private_sg_id
-#   postgres_identifier  = "ma-rds-postgres"
-#   postgres_port        = 5432
-#   db_name              = "zpi"
-#   user_name            = var.db_user_name
-#   user_password        = var.db_user_password
-# }
+module "rds_postgres" {
+  source               = "./modules/rds_postgres/"
+  private_subnet_ids   = module.network.private_subnet_ids
+  private_subnet_sg_id = module.network.private_sg_id
+  postgres_identifier  = "ma-rds-postgres"
+  postgres_port        = 5432
+  db_name              = "zpi"
+  user_name            = var.db_user_name
+  user_password        = var.db_user_password
+}
