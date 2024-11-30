@@ -8,6 +8,9 @@ sudo chmod 600 ~/.ssh/id_rsa
 mkdir -p ~/duckdns
 echo url="https://www.duckdns.org/update?domains=${duckdns_domain}&token=${duckdns_token}&ip=" | curl -k -o ~/duckdns/duck.log -K -
 
+sudo yum install -y amazon-linux-extras
+sudo amazon-linux-extras install postgresql15
+
 sudo amazon-linux-extras install docker
 sudo service docker start
 sudo usermod -a -G docker ec2-user
