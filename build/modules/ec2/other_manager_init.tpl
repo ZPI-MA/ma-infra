@@ -22,6 +22,6 @@ MANAGER_IP=$(aws ssm get-parameter \
   --query Parameter.Value \
   --output text)
 
-sudo docker login registry.gitlab.com -u sunba23 -p ${secrets_gitlab_access_token}
+echo "${secrets_gitlab_registry_token}" | docker login registry.gitlab.com -u ${secrets_gitlab_registry_username} --password-stdin
 
 sudo docker swarm join --token $MANAGER_TOKEN $MANAGER_IP:2377

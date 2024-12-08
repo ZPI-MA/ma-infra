@@ -31,6 +31,8 @@ resource "aws_instance" "first_manager" {
     secrets_database_user         = var.secrets_database_user
     secrets_database_password     = var.secrets_database_password
     secrets_gitlab_access_token   = var.secrets_gitlab_access_token
+    secrets_gitlab_registry_token = var.secrets_gitlab_registry_token
+    secrets_gitlab_registry_username = var.secrets_gitlab_registry_username
     duckdns_domain                = var.duckdns_domain
     duckdns_token                 = var.duckdns_token
 
@@ -56,7 +58,8 @@ resource "aws_instance" "other_managers" {
     region                       = data.aws_region.current.name
     gitlab_ssh_public            = var.gitlab_ssh_public
     ec2_ssh_private              = var.ec2_ssh_private
-    secrets_gitlab_access_token  = var.secrets_gitlab_access_token
+    secrets_gitlab_registry_token = var.secrets_gitlab_registry_token
+    secrets_gitlab_registry_username = var.secrets_gitlab_registry_username
   })
 }
 

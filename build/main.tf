@@ -70,6 +70,8 @@ module "ec2" {
   secrets_database_user         = data.hcp_vault_secrets_app.postgres.secrets["user_name"]
   secrets_database_password     = data.hcp_vault_secrets_app.postgres.secrets["user_password"]
   secrets_gitlab_access_token   = data.hcp_vault_secrets_app.gitlab.secrets["access_token"]
+  secrets_gitlab_registry_token = data.hcp_vault_secrets_app.gitlab.secrets["gitlab_registry_token"]
+  secrets_gitlab_registry_username   = data.hcp_vault_secrets_app.gitlab.secrets["gitlab_registry_username"]
 
 
   # Network config

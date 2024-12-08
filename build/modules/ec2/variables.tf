@@ -46,6 +46,16 @@ variable "secrets_gitlab_access_token" {
   sensitive = true
 }
 
+variable "secrets_gitlab_registry_token" {
+  type = string
+  sensitive = true
+}
+
+variable "secrets_gitlab_registry_username" {
+  type = string
+  sensitive = true
+}
+
 variable "public_subnet_id" {
   type        = string
   description = "ID of the Music Assistant public subnet"
