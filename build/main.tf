@@ -69,6 +69,7 @@ module "ec2" {
   secrets_spotify_client_secret = data.hcp_vault_secrets_app.spotify.secrets["client_secret"]
   secrets_database_user         = data.hcp_vault_secrets_app.postgres.secrets["user_name"]
   secrets_database_password     = data.hcp_vault_secrets_app.postgres.secrets["user_password"]
+  secrets_database_host     = data.hcp_vault_secrets_app.postgres.secrets["db_host"]
   secrets_gitlab_access_token   = data.hcp_vault_secrets_app.gitlab.secrets["access_token"]
   secrets_gitlab_registry_token = data.hcp_vault_secrets_app.gitlab.secrets["gitlab_registry_token"]
   secrets_gitlab_registry_username   = data.hcp_vault_secrets_app.gitlab.secrets["gitlab_registry_username"]

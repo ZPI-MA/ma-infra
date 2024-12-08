@@ -30,12 +30,12 @@ resource "aws_instance" "first_manager" {
     secrets_spotify_client_secret = var.secrets_spotify_client_secret
     secrets_database_user         = var.secrets_database_user
     secrets_database_password     = var.secrets_database_password
+    secrets_database_host         = var.secrets_database_host
     secrets_gitlab_access_token   = var.secrets_gitlab_access_token
     secrets_gitlab_registry_token = var.secrets_gitlab_registry_token
     secrets_gitlab_registry_username = var.secrets_gitlab_registry_username
     duckdns_domain                = var.duckdns_domain
     duckdns_token                 = var.duckdns_token
-
   })
 }
 

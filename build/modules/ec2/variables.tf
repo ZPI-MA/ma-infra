@@ -41,6 +41,11 @@ variable "secrets_database_password" {
   sensitive = true
 }
 
+variable "secrets_database_host" {
+  type      = string
+  sensitive = true
+}
+
 variable "secrets_gitlab_access_token" {
   type = string
   sensitive = true

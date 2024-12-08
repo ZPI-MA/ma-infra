@@ -45,5 +45,6 @@ printf "${secrets_spotify_client_id}" | sudo docker secret create spotify_client
 printf "${secrets_spotify_client_secret}" | sudo docker secret create spotify_client_secret -
 printf "${secrets_database_user}" | sudo docker secret create db_user -
 printf "${secrets_database_password}" | sudo docker secret create db_password -
+printf "${secrets_database_host}" | sudo docker secret create db_host -
 sudo docker secret create ssl_cert /etc/letsencrypt/live/spotiprofile.duckdns.org/fullchain.pem
 sudo docker secret create ssl_key /etc/letsencrypt/live/spotiprofile.duckdns.org/privkey.pem
